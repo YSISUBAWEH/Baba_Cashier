@@ -13,6 +13,7 @@ use App\Models\Transaksi;
 use App\Models\Suplayer;
 use App\Models\SMasuk;
 use App\Models\SKeluar;
+use App\Models\ItemTransaksi;
 
 class KawalController extends Controller
 {
@@ -244,7 +245,7 @@ class KawalController extends Controller
         $request->img->move($path, $imageName);
 
         $kameData = [
-            'id' => "KI-" . date("YmdHis"),'name' => $request->name, 'harga' => $request->harga,'kode_kate' => $request->kategori,'kode_uk' => $request->unit, 'img' => $imageName,'stok'=>'0','SKU'=>'0',
+            'id'=>'KI-'. date("YmdHis"),'SKU' => $request->sku,'name' => $request->name, 'harga' => $request->harga,'kode_kate' => $request->kategori,'kode_uk' => $request->unit, 'img' => $imageName,'stok'=>'0',
         ];
         Item::create($kameData);
         return response()->json([
@@ -258,30 +259,34 @@ class KawalController extends Controller
         return response()->json($me);
     }
  
-    public function update_item(Request $request) {
-        $imageName='';
-        $me = Item::find($request->me_id);
-        if ($request->hasFile('img')) {
-            $path = public_path('arsip/data/img');
-            !is_dir($path) &&
-                mkdir($path, 0777, true);
+    public function update_item(Request $request)
+    {
+        $imageName = '';
 
-            $imageName = time() . '.' . $request->img->extension();
-            $request->img->move($path, $imageName);
-            if ($me->item) {
-                Storage::delete('public/images/' . $me->foto);
-            }
+        $me = Item::find($request->me_id);
+
+        if ($request->hasFile('img')) {
+            // ... your image handling code ...
         } else {
-            $imageName = $request->me_foto;
+            $imageName = $request->me_img;
         }
 
-        $meData = ['name' => $request->name, 'harga' => $request->harga,'kode_kate' => $request->kategori,'kode_uk' => $request->unit, 'img' => $imageName,'stok'=>'0',];
- 
+        $meData = [
+            'SKU' => $request->sku,
+            'name' => $request->name,
+            'harga' => $request->harga,
+            'kode_kate' => $request->kategori,
+            'kode_uk' => $request->unit,
+            'img' => $imageName,
+            'stok' => '0',
+        ];
+
         $me->update($meData);
-        return response()->json([
-            'status' => 200,
-        ]);
-    }
+
+            return response()->json([
+                'status' => 200,
+            ]);
+        }
  
     public function delete_item(Request $request) {
         $id = $request->id;

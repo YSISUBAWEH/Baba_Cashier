@@ -30,4 +30,8 @@ protected $keyType = 'string';
     {
         return $this->belongsTo(Unit::class, 'kode_uk', 'kode_uk');
     }
+    public function itemTransaksis()
+    {
+        return $this->hasMany(ItemTransaksi::class, 'item_id');
+    }
 }

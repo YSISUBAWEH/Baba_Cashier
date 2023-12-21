@@ -56,6 +56,10 @@
         <div class="modal-body p-4">
           <div class="row">
             <div class="my-2">
+              <label class="fw-semibold mb-1" for="name">Id Item</label>
+              <input type="text" name="sku" class="form-control" placeholder="Masukkan Id Item" required>
+            </div>
+            <div class="my-2">
               <label class="fw-semibold mb-1" for="name">name</label>
               <input type="text" name="name" class="form-control" placeholder="Name" required>
             </div>
@@ -113,12 +117,16 @@
           <div class="modal-body p-4 bg-light">
             <div class="row">
               <div class="my-2">
+                <label for="name">Id Item</label>
+                <input type="text" name="sku" id="sku" class="form-control" required>
+              </div>
+              <div class="my-2">
                 <label for="name">name</label>
                 <input type="text" name="name" id="name" class="form-control" placeholder="Name" required>
               </div>
               <div class="my-2">
-                <label for="name">name</label>
-                <input type="text" name="harga" id="harga" class="form-control" placeholder="Harga" required>
+                <label for="name">Harga</label>
+                <input type="text" name="harga" id="harga" class="form-control" required>
               </div>
               <div class="my-2">
               <label for="kategori_menu">Kategori</label>
@@ -140,7 +148,7 @@
             </div>
             <div class="my-2">
               <label for="foto">Select Foto</label>
-              <input type="file" name="img" class="form-control" required>
+              <input type="file" name="img" class="form-control">
             </div>
               <div class="mt-2" id="img"></div>
             </div>
@@ -218,6 +226,7 @@
             _token: '{{ csrf_token() }}'
           },
           success: function(response) {
+             $("#sku").val(response.SKU);
              $("#name").val(response.name);
             $("#harga").val(response.harga);
             $("#kategori").val(response.kode_kate);
@@ -255,7 +264,10 @@
             $("#edit_item_btn").text('Update Menu');
             $("#edit_item_form")[0].reset();
             $("#editItModal").modal('hide');
-          }
+          },error: function(data){
+       var errors = data.responseJSON;
+       console.log(errors);
+   }
         });
       });
  
